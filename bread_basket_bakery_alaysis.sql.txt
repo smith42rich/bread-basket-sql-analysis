@@ -1,0 +1,49 @@
+--Bread Basket Bakery Analysis
+--Database:  PostgreSQL
+--Purpose:  Explore bakery transaction and product sales
+
+--1.  Top ten best selling items
+SELECT
+	item,
+	COUNT(*) AS times_sold
+FROM public.bakery_sales
+GROUP BY item
+ORDER BY times_sold DESC
+LIMIT 10;
+
+
+--2.  Count unique transactions
+SELECT
+	COUNT(DISTINCT transaction_id) AS total_transactions
+FROM public.bakery_sales;
+
+
+--3.  Calculate average items per transaction
+SELECT
+	COUNT(*) total_items_records,
+	COUNT(DISTINCT transaction_id) AS total_transactions,
+	ROUND(
+		COUNT (*)::numeric /
+		COUNT(DISTINCT transaction_id),
+		2) AS avg_items_per_transaction
+		FROM public.bakery_sales;
+
+
+--4.  Compare açtıvity by time of day
+SELECT 
+	period_day,
+	COUNT(*) AS items_records,
+	COUNT(DISTINCT transaction_id) AS transactions
+FROM public.bakery_sales
+GROUP BY period_day
+ORDER BY transactions DESC;
+
+
+--5.  Compare weekday and weekend activity
+SELECT 
+	weekday_weekend,
+	COUNT(*) AS item_records,
+	COUNT (DISTINCT transaction_id) AS transactions
+	FROM public.bakery_sales
+	GROUP BY weekday_weekend
+	ORDER BY transactions DESC;
